@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sensor.aop.LoggableAPI;
 import com.sensor.config.JwtConfig;
 import com.sensor.dto.UserDTO;
 import com.sensor.entity.AppUser;
@@ -23,7 +24,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@LoggableAPI
+@Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private AuthenticationManager authenticationManager;
@@ -69,6 +73,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 		UserDTO userDto = modelMapper.map(user, UserDTO.class);
 		response.setStatus(HttpServletResponse.SC_CREATED);
 		response.setContentType(APPLICATION_JSON_VALUE); // send as json File in Body
+		log.info("Successful Authentication By User:{}", userDto.getUsername());
 		new ObjectMapper().writeValue(response.getOutputStream(), userDto);
 
 	}

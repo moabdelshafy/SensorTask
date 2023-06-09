@@ -2,7 +2,6 @@ package com.sensor.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
-import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.sensor.config.JwtConfig;
-import com.sensor.dto.UserDTO;
 import com.sensor.entity.AppUser;
 import com.sensor.exceptions.SensorTaskException;
 import com.sensor.repository.AppUserRepository;
@@ -26,7 +24,6 @@ public class AppUserServiceImpl implements UserDetailsService, AppUserService {
 	private final JwtConfig jwtConfig;
 	private final AppUserRepository appUserRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final ModelMapper modelMapper;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -43,13 +40,12 @@ public class AppUserServiceImpl implements UserDetailsService, AppUserService {
 
 	@CacheEvict(value = { "findUserById", "findByUserName", "getAllUsers" }, allEntries = true)
 	@Override
-	public UserDTO addUser(AppUser user) {
+	public AppUser addUser(AppUser user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		appUserRepository.save(user);
-		return modelMapper.map(user, UserDTO.class);
+		return appUserRepository.save(user);
 	}
 
-	@Cacheable("findUserById")
+	@Cacheable(cacheNames = "findUserById", unless = "#result == null")
 	@Override
 	public AppUser findUserById(Long id) {
 		Optional<AppUser> user = appUserRepository.findById(id);
@@ -69,7 +65,7 @@ public class AppUserServiceImpl implements UserDetailsService, AppUserService {
 		return user;
 	}
 
-	@Cacheable("getAllUsers")
+	@Cacheable(cacheNames = "getAllUsers", unless = "#result == null")
 	@Override
 	public List<AppUser> getAllUsers() {
 		return appUserRepository.findAll();
