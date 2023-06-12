@@ -48,7 +48,6 @@ public class TokenVerifier extends OncePerRequestFilter {
 		String authorizationHeader = request.getHeader(jwtConfig.getAuthorizationHeader());
 		if (authorizationHeader != null && authorizationHeader.startsWith(jwtConfig.getTokenPrefix())) {
 			try {
-
 				String token = authorizationHeader.replace(jwtConfig.getTokenPrefix(), ""); // Token without Prefix
 				JWTVerifier verifier = JWT.require(algorithm).build();
 				DecodedJWT decodedJWT = verifier.verify(token);

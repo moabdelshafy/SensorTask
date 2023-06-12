@@ -29,7 +29,7 @@ public class SensorLocationImpl implements SensorLocationService {
 	public SensorLocationDTO addSensorsToLocation(SensorLocationDTO locationSensorDTO) {
 		Optional<Location> location = locationRepository.findById(locationSensorDTO.getLocationId());
 		Optional<Sensor> sensor = sensorRepository.findById(locationSensorDTO.getSensorId());
-		if (validateSensorAndLocation(location, sensor)) {
+		if (validateSensorAndLocation(location, sensor, locationSensorDTO)) {
 			SensorLocation locationSensor = mapDTOToEntity(location.get(), sensor.get(), locationSensorDTO);
 			locationSensor = locationSensorRepository.save(locationSensor);
 			return mapEntityToDTO(locationSensor, locationSensorDTO);
@@ -59,12 +59,13 @@ public class SensorLocationImpl implements SensorLocationService {
 		return locationSensorDTO;
 	}
 
-	public boolean validateSensorAndLocation(Optional<Location> location, Optional<Sensor> sensor) {
+	public boolean validateSensorAndLocation(Optional<Location> location, Optional<Sensor> sensor
+			, SensorLocationDTO locationSensorDTO) {
 		if (!location.isPresent()) {
-			throw new SensorTaskException("SENSOR1000", new Object[] { location.get().getId() });
+			throw new SensorTaskException("SENSOR1000", new Object[] { locationSensorDTO.getLocationId() });
 		}
 		if (!sensor.isPresent()) {
-			throw new SensorTaskException("SENSOR1000", new Object[] { sensor.get().getId() });
+			throw new SensorTaskException("SENSOR1000", new Object[] { locationSensorDTO.getSensorId() });
 		}
 		return true;
 	}

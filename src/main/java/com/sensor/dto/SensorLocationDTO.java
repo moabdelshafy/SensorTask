@@ -23,7 +23,7 @@ public class SensorLocationDTO {
 	@NotNull(message = "{SENSOR1002}")
 	private Float min;
 
-	@Max(value = 100, message = "{SENSOR1006}")
+	@Max(value = 1000, message = "{SENSOR1006}")
 	@NotNull(message = "{SENSOR1002}")
 	private Float max;
 
