@@ -3,7 +3,6 @@ package com.sensor.security;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.io.IOException;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -14,19 +13,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sensor.aop.LoggableAPI;
 import com.sensor.config.JwtConfig;
 import com.sensor.dto.UserDTO;
 import com.sensor.entity.AppUser;
 import com.sensor.exceptions.ResponseMessage;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
-@LoggableAPI
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 

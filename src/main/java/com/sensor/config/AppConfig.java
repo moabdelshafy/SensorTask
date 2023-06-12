@@ -1,7 +1,7 @@
 package com.sensor.config;
 
 import java.time.format.DateTimeFormatter;
-
+import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +11,8 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -18,7 +20,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 @Configuration
-@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+@EnableJpaAuditing
 public class AppConfig {
 
 	@Bean
@@ -27,8 +29,14 @@ public class AppConfig {
 	}
 
 	@Bean
-	public AuditorAware<String> auditorAware() {
-		return new AuditorAwareImpl();
+	public AuditorAware<String> auditorProvider() {
+		return () -> {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication == null || !authentication.isAuthenticated()) {
+				return Optional.empty();
+			}
+			return Optional.of(authentication.getName());
+		};
 	}
 
 	@Bean

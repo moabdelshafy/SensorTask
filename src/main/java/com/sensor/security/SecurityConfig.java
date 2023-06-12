@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+
 import com.auth0.jwt.algorithms.Algorithm;
 import com.sensor.config.JwtConfig;
 import com.sensor.serviceImpl.AppUserServiceImpl;
@@ -43,7 +44,6 @@ public class SecurityConfig {
 	public SecurityFilterChain FilterChain(HttpSecurity http) throws Exception {
 		AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), jwtConfig,
 				messageSource, modelMapper);
-		authenticationFilter.setFilterProcessesUrl("/sensor/login");
 
 		http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable())
 				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

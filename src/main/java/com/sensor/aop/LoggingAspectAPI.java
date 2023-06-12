@@ -46,7 +46,7 @@ public class LoggingAspectAPI {
 				}
 			}
 
-			log.info("Starting execution of method " + methodName);
+			log.info("Starting execution of method {} ", methodName);
 
 		} catch (Exception e) {
 			e.printStackTrace();

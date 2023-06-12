@@ -3,6 +3,7 @@ package com.sensor.exceptions;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,9 +18,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.auth0.jwt.exceptions.AlgorithmMismatchException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -33,12 +31,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<ResponseMessage> handleDuplicateKeyException(DataIntegrityViolationException ex) {
-		String keyParam = getKeyOfUniqueConstraint(ex.getCause().getCause().getMessage());
-		String errorMessage = getMessageSource().getMessage("SENSOR1003", new Object[] { keyParam },
-				LocaleContextHolder.getLocale());
-		String errorCode = "SENSOR1003";
-		ResponseMessage responseMessage = new ResponseMessage(errorCode, errorMessage);
+	public ResponseEntity<ResponseMessage> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+		Throwable rootCause = ExceptionUtils.getRootCause(ex);
+		ResponseMessage responseMessage = new ResponseMessage("SQL_EXCEPTION", rootCause.getMessage());
 		return new ResponseEntity<>(responseMessage, HttpStatus.CONFLICT);
 	}
 
@@ -55,23 +50,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(UsernameNotFoundException.class)
 	public ResponseEntity<ResponseMessage> handleUsernameNotFoundException(UsernameNotFoundException ex) {
 		return new ResponseEntity<>(new ResponseMessage(ex.getMessage()), HttpStatus.NOT_FOUND);
-	}
-
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ResponseMessage> handleGeneralException(Exception ex) {
-		return new ResponseEntity<>(new ResponseMessage(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-
-	private String getKeyOfUniqueConstraint(String errorMessage) {
-		String detailMessage = errorMessage.substring(errorMessage.indexOf("Detail:") + "Detail:".length()).trim();
-		String specificOutput = detailMessage.substring(detailMessage.indexOf("("), detailMessage.lastIndexOf(")") + 1)
-				.trim();
-		return specificOutput;
-	}
-
-	@ExceptionHandler({ JWTVerificationException.class, AlgorithmMismatchException.class })
-	public ResponseEntity<ResponseMessage> handleAlgorithmMismatchException(JWTVerificationException ex) {
-		return new ResponseEntity<>(new ResponseMessage("test"), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }
