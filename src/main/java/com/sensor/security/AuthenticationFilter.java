@@ -1,9 +1,9 @@
 package com.sensor.security;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 import java.io.IOException;
 import org.modelmapper.ModelMapper;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -64,6 +64,9 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
 		AppUser user = (AppUser) authResult.getPrincipal();
+		MDC.put("methodName", "successfulAuthentication");
+		MDC.put("username", user.getUsername());
+		MDC.put("userId", user.getId().toString());
 		String access_token = jwtConfig.generateAccessToken(request, response, authResult);
 		user.setToken(jwtConfig.getTokenPrefix() + access_token);
 		UserDTO userDto = modelMapper.map(user, UserDTO.class);

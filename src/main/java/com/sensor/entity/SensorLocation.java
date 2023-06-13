@@ -20,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @EntityListeners({ AuditingEntityListener.class })
-@Table(name = "location_sensor")
+@Table(name = "sensor_location")
 public class SensorLocation {
 
 	@EmbeddedId

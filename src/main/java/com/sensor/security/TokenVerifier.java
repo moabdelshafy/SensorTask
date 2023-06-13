@@ -2,12 +2,9 @@ package com.sensor.security;
 
 import static java.util.Arrays.stream;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,8 +24,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class TokenVerifier extends OncePerRequestFilter {
 
-	Logger LOG = LoggerFactory.getLogger(TokenVerifier.class);
-
 	private JwtConfig jwtConfig;
 	private Algorithm algorithm;
 
@@ -42,11 +37,10 @@ public class TokenVerifier extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-//		if (request.getServletPath().equals("/sensor/login")) {
-//			filterChain.doFilter(request, response);
-//		} else {
+
 		String authorizationHeader = request.getHeader(jwtConfig.getAuthorizationHeader());
 		if (authorizationHeader != null && authorizationHeader.startsWith(jwtConfig.getTokenPrefix())) {
+
 			try {
 				String token = authorizationHeader.replace(jwtConfig.getTokenPrefix(), ""); // Token without Prefix
 				JWTVerifier verifier = JWT.require(algorithm).build();
@@ -67,10 +61,11 @@ public class TokenVerifier extends OncePerRequestFilter {
 				ResponseMessage responseMessage = new ResponseMessage("TOKEN_EXCEPTION", exception.getMessage());
 				new ObjectMapper().writeValue(response.getOutputStream(), responseMessage);
 			}
+
 		} else {
 			filterChain.doFilter(request, response);
 		}
-		// }
+
 	}
 
 }
