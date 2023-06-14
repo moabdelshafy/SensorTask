@@ -1,7 +1,5 @@
 package com.sensor.dto;
 
-import java.util.Set;
-import com.sensor.entity.SensorLocation;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -15,7 +13,6 @@ public class SensorDTO extends BaseDTO {
 	@NotBlank(message = "{SENSOR1002}")
 	private String name;
 	private Boolean status;
-	private Set<SensorLocation> locationSensors;
 
 	public String getName() {
 		return name;
@@ -31,14 +28,6 @@ public class SensorDTO extends BaseDTO {
 
 	public void setStatus(Boolean status) {
 		this.status = status;
-	}
-
-	public Set<SensorLocation> getLocationSensors() {
-		return locationSensors;
-	}
-
-	public void setLocationSensors(Set<SensorLocation> locationSensors) {
-		this.locationSensors = locationSensors;
 	}
 
 }

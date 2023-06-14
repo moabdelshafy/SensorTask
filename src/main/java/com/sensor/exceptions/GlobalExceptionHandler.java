@@ -1,8 +1,6 @@
 package com.sensor.exceptions;
 
-import java.util.List;
 import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -11,7 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,16 +37,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-		List<String> errorMessages = ex.getBindingResult().getAllErrors().stream()
-				.map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
+		String errorMessages = ex.getBindingResult().getAllErrors().stream()
+				.map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList()).get(0);
 		String errorCode = "SENSOR1002";
 
-		return new ResponseEntity<>(new ResponseMessage(errorCode, errorMessages.get(0)), HttpStatus.BAD_REQUEST);
-	}
-
-	@ExceptionHandler(UsernameNotFoundException.class)
-	public ResponseEntity<ResponseMessage> handleUsernameNotFoundException(UsernameNotFoundException ex) {
-		return new ResponseEntity<>(new ResponseMessage(ex.getMessage()), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(new ResponseMessage(errorCode, errorMessages), HttpStatus.BAD_REQUEST);
 	}
 
 }

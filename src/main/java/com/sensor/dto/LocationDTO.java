@@ -1,9 +1,5 @@
 package com.sensor.dto;
 
-import java.util.Set;
-
-import com.sensor.entity.SensorLocation;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +16,5 @@ public class LocationDTO extends BaseDTO {
 
 	@NotBlank(message = "{SENSOR1002}")
 	private String code;
-	private Set<SensorLocation> locationSensors;
 
 }
