@@ -4,5 +4,6 @@ import com.sensor.dto.LocationDTO;
 
 public interface LocationService {
 
-	public LocationDTO addLocation(LocationDTO locationDTO);
+	public LocationDTO addOrUpdateLocation(LocationDTO locationDTO);
+	public LocationDTO findById(Long id);
 }

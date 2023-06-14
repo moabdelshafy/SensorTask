@@ -3,12 +3,12 @@ package com.sensor.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.sensor.dto.LocationDTO;
 import com.sensor.service.LocationService;
-
 import jakarta.validation.Valid;
 
 @Validated
@@ -21,7 +21,12 @@ public class LocationController {
 
 	@PostMapping("/addLocation")
 	public LocationDTO addLocation(@RequestBody @Valid LocationDTO locationDTO) {
-		return locationService.addLocation(locationDTO);
+		return locationService.addOrUpdateLocation(locationDTO);
+	}
+
+	@PutMapping("/updateLocation")
+	public LocationDTO updateLocation(@RequestBody @Valid LocationDTO locationDTO) {
+		return locationService.addOrUpdateLocation(locationDTO);
 	}
 
 }

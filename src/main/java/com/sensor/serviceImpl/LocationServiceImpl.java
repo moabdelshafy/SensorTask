@@ -1,11 +1,12 @@
 package com.sensor.serviceImpl;
 
+import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.sensor.dto.LocationDTO;
 import com.sensor.entity.Location;
+import com.sensor.exceptions.SensorTaskException;
 import com.sensor.repository.LocationRepository;
 import com.sensor.service.LocationService;
 
@@ -18,10 +19,24 @@ public class LocationServiceImpl implements LocationService {
 	private ModelMapper mapper;
 
 	@Override
-	public LocationDTO addLocation(LocationDTO locationDTO) {
-		Location location = mapper.map(locationDTO, Location.class);
-		location = locationRepository.save(location);
+	public LocationDTO addOrUpdateLocation(LocationDTO locationDTO) {
+		Location location = new Location();
+		if (locationDTO.getId() != null) { // check if in update case or not
+			location = locationRepository.findById(locationDTO.getId())
+					.orElseThrow(() -> new SensorTaskException("SENSOR1000", new Object[] { locationDTO.getId() }));
+		}
+		location = mapper.map(locationDTO, Location.class);
+		locationRepository.save(location);
 		return mapper.map(location, LocationDTO.class);
+	}
+
+	@Override
+	public LocationDTO findById(Long id) {
+		Optional<Location> location = locationRepository.findById(id);
+		if (!location.isPresent()) {
+			throw new SensorTaskException("SENSOR1000", new Object[] { id });
+		}
+		return mapper.map(location.get(), LocationDTO.class);
 	}
 
 }
