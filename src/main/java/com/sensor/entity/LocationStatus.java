@@ -1,6 +1,7 @@
 package com.sensor.entity;
 
 import com.sensor.dto.LocationState;
+import com.sensor.dto.SensorCases;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,7 +30,11 @@ public class LocationStatus extends BaseEntity<Long> {
 	@Enumerated(EnumType.STRING)
 	private LocationState status;
 
-	private String message;
-	private Float readingValue;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private SensorCases message;
+	
+	@Column(length = 5)
+	private String readingValue;
 
 }

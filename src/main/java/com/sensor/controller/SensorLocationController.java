@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.sensor.dto.SensorLocationDTO;
 import com.sensor.service.SensorLocationService;
+
 import jakarta.validation.Valid;
 
 @Validated
@@ -21,6 +23,11 @@ public class SensorLocationController {
 	@PostMapping("/addSensorsToLocation")
 	public SensorLocationDTO addSensorsToLocation(@RequestBody @Valid SensorLocationDTO locationSensorDTO) {
 		return locationSensorService.addSensorsToLocation(locationSensorDTO);
+	}
+
+	@PostMapping("/findByLocationIdAndSensorId")
+	public SensorLocationDTO findByLocationIdAndSensorId(@RequestBody SensorLocationDTO locationSensorDTO) {
+		return locationSensorService.findByLocationIdAndSensorId(locationSensorDTO);
 	}
 
 }

@@ -7,4 +7,5 @@ import com.sensor.entity.LocationStatus;
 @Repository
 public interface LocationStatusRepository extends JpaRepository<LocationStatus, Long> {
 
+	public LocationStatus findByLocationId(Long locationId);
 }
