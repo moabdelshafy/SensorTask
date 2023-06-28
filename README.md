@@ -8,3 +8,7 @@ The user can configure and interact with the sensors. Also, user can adjust the 
 Every location in the environment will have one sensor of every type.   
 
 
+Technologies:
+Spring boot, JPA, Security, Hibernate, MySQL, Caching, JWT, Lombok, ModelMapper, Guava
+
+
