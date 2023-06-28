@@ -37,6 +37,7 @@ public class LocationStatusServiceImpl implements LocationStatusService {
 	private final static String Light_Sensor = "Light";
 	private final static String Temperature_Sensor = "Temperature";
 
+    // Sensor check every 10 second and record any abnormal state
 	@Scheduled(fixedDelay = 10000, initialDelay = 10000)
 	public void checkAndChangeStateOfLocation() {
 
@@ -54,40 +55,43 @@ public class LocationStatusServiceImpl implements LocationStatusService {
 		float readingValue = generateRandomNumber();
 		for (SensorLocation sensorLocation : sensorLocations) {
 
-			if (sensorLocation.getSensor().getName().equals(Humidity_Sensor)) {
-				Range<Float> range = Range.closed(sensorLocation.getMin(), sensorLocation.getMax());
-				if (range.contains(readingValue)) {
-					states.put(sensorLocation.getSensor().getName(), SensorCases.NORMAL_CASE);
-				} else if (readingValue > sensorLocation.getMax()) {
-					states.put(sensorLocation.getSensor().getName(), SensorCases.HIGH);
-				} else if (readingValue < sensorLocation.getMin()) {
-					states.put(sensorLocation.getSensor().getName(), SensorCases.LOW);
+			if (sensorLocation.getSensor().getStatus()) {
+
+				if (sensorLocation.getSensor().getName().equals(Humidity_Sensor)) {
+					Range<Float> range = Range.closed(sensorLocation.getMin(), sensorLocation.getMax());
+					if (range.contains(readingValue)) {
+						states.put(sensorLocation.getSensor().getName(), SensorCases.NORMAL_CASE);
+					} else if (readingValue > sensorLocation.getMax()) {
+						states.put(sensorLocation.getSensor().getName(), SensorCases.HIGH);
+					} else if (readingValue < sensorLocation.getMin()) {
+						states.put(sensorLocation.getSensor().getName(), SensorCases.LOW);
+					}
+
 				}
 
-			}
+				if (sensorLocation.getSensor().getName().equals(Light_Sensor)) {
+					Range<Float> range = Range.closed(sensorLocation.getMin(), sensorLocation.getMax());
+					if (range.contains(readingValue)) {
+						states.put(sensorLocation.getSensor().getName(), SensorCases.NORMAL_CASE);
+					} else if (readingValue > sensorLocation.getMax()) {
+						states.put(sensorLocation.getSensor().getName(), SensorCases.HIGH);
+					} else if (readingValue < sensorLocation.getMin()) {
+						states.put(sensorLocation.getSensor().getName(), SensorCases.LOW);
+					}
 
-			if (sensorLocation.getSensor().getName().equals(Light_Sensor)) {
-				Range<Float> range = Range.closed(sensorLocation.getMin(), sensorLocation.getMax());
-				if (range.contains(readingValue)) {
-					states.put(sensorLocation.getSensor().getName(), SensorCases.NORMAL_CASE);
-				} else if (readingValue > sensorLocation.getMax()) {
-					states.put(sensorLocation.getSensor().getName(), SensorCases.HIGH);
-				} else if (readingValue < sensorLocation.getMin()) {
-					states.put(sensorLocation.getSensor().getName(), SensorCases.LOW);
 				}
 
-			}
+				if (sensorLocation.getSensor().getName().equals(Temperature_Sensor)) {
+					Range<Float> range = Range.closed(sensorLocation.getMin(), sensorLocation.getMax());
+					if (range.contains(readingValue)) {
+						states.put(sensorLocation.getSensor().getName(), SensorCases.NORMAL_CASE);
+					} else if (readingValue > sensorLocation.getMax()) {
+						states.put(sensorLocation.getSensor().getName(), SensorCases.HIGH);
+					} else if (readingValue < sensorLocation.getMin()) {
+						states.put(sensorLocation.getSensor().getName(), SensorCases.LOW);
+					}
 
-			if (sensorLocation.getSensor().getName().equals(Temperature_Sensor)) {
-				Range<Float> range = Range.closed(sensorLocation.getMin(), sensorLocation.getMax());
-				if (range.contains(readingValue)) {
-					states.put(sensorLocation.getSensor().getName(), SensorCases.NORMAL_CASE);
-				} else if (readingValue > sensorLocation.getMax()) {
-					states.put(sensorLocation.getSensor().getName(), SensorCases.HIGH);
-				} else if (readingValue < sensorLocation.getMin()) {
-					states.put(sensorLocation.getSensor().getName(), SensorCases.LOW);
 				}
-
 			}
 
 		}
