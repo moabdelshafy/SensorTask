@@ -40,7 +40,6 @@ public class LoggingAspectAPI {
 				MDC.put("username", appUser.getUsername());
 				MDC.put("userId", appUser.getId().toString());
 			}
-
 			log.info("Starting execution of method {} ", methodName);
 
 		} catch (Exception e) {
@@ -50,7 +49,9 @@ public class LoggingAspectAPI {
 	}
 
 	@After("pointcut()")
-	public void logMethodEnd() {
+	public void logMethodEnd(JoinPoint joinPoint) {
+		String methodName = joinPoint.getSignature().getName();
+		log.info("Finished execution of method {} ", methodName);
 		MDC.remove("methodName");
 	}
 }
