@@ -49,28 +49,28 @@ public class Audit {
 	@LastModifiedDate
 	private LocalDateTime lastModifiedDate;
 
-	@PrePersist
-	protected void onCreate() {
-		this.setCreatedBy(getUserName());
-		this.setCreatedDate(LocalDateTime.now());
-		this.setLastModifiedBy(getUserName());
-		this.setLastModifiedDate(LocalDateTime.now());
-	}
+//	@PrePersist
+//	protected void onCreate() {
+//		this.setCreatedBy(getUserName());
+//		this.setCreatedDate(LocalDateTime.now());
+//		this.setLastModifiedBy(getUserName());
+//		this.setLastModifiedDate(LocalDateTime.now());
+//	}
+//
+//	@PreUpdate
+//	protected void onUpdate() {
+//		if (this.getCreatedBy() == null) {
+//			this.setCreatedBy(getUserName());
+//		}
+//
+//		if (this.getCreatedDate() == null) {
+//			this.setCreatedDate(LocalDateTime.now());
+//		}
+//	}
 
-	@PreUpdate
-	protected void onUpdate() {
-		if (this.getCreatedBy() == null) {
-			this.setCreatedBy(getUserName());
-		}
-
-		if (this.getCreatedDate() == null) {
-			this.setCreatedDate(LocalDateTime.now());
-		}
-	}
-
-	private String getUserName() {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return principal.toString();
-	}
+//	private String getUserName() {
+//		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		return principal.toString();
+//	}
 
 }

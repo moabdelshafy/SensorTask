@@ -2,6 +2,9 @@ package com.sensor.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.sensor.mapper.LocationMapper;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -17,33 +20,35 @@ import com.sensor.exceptions.SensorTaskException;
 import com.sensor.repository.LocationRepository;
 import com.sensor.service.LocationService;
 import com.sensor.service.LocationStatusService;
-
 @Service
 public class LocationServiceImpl implements LocationService {
 
 	@Autowired
 	private LocationRepository locationRepository;
-
 	private LocationStatusService locationStatusService;
 	@Autowired
 	private ModelMapper mapper;
+	private final LocationMapper locationMapper;
 
 	@Autowired
-	public LocationServiceImpl(@Lazy LocationStatusService locationStatusService) {
+	public LocationServiceImpl(@Lazy LocationStatusService locationStatusService, LocationMapper locationMapper) {
 		super();
 		this.locationStatusService = locationStatusService;
+		this.locationMapper = locationMapper;
 	}
 
 	@CacheEvict(value = { "findAllLocations" }, allEntries = true)
 	@Override
 	public LocationDTO addOrUpdateLocation(LocationDTO locationDTO) {
-		Location location = new Location();
+		Location location;
 		if (locationDTO.getId() != null) { // check if in update case or not
 			location = locationRepository.findById(locationDTO.getId())
 					.orElseThrow(() -> new SensorTaskException("SENSOR1000", new Object[] { locationDTO.getId() }));
-			location.setCode(locationDTO.getCode());
+			//location.setCode(locationDTO.getCode()); manual mapping
+			//location = mapper.map(locationDTO,Location.class); mapping using ModelMapper
+			location = locationMapper.mapToEntity(locationDTO, location); // mapping using MapStruct
 		} else {
-			location.setCode(locationDTO.getCode());
+			location = locationMapper.mapToEntity(locationDTO);
 		}
 
 		locationRepository.save(location);

@@ -1,6 +1,8 @@
 package com.sensor.serviceImpl;
 
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -10,14 +12,12 @@ import com.sensor.dto.SensorDTO;
 import com.sensor.entity.Sensor;
 import com.sensor.repository.SensorRepository;
 import com.sensor.service.SensorService;
-
+@RequiredArgsConstructor
 @Service
 public class SensorServiceImpl implements SensorService {
 
-	@Autowired
-	private SensorRepository sensorRepository;
-	@Autowired
-	private ModelMapper modelMapper;
+	private final SensorRepository sensorRepository;
+	private final ModelMapper modelMapper;
 
 	@CacheEvict(value = { "findAllSensors" }, allEntries = true)
 	@Override
