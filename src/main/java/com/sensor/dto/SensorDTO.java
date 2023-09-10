@@ -2,10 +2,12 @@ package com.sensor.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SensorDTO extends BaseDTO {
 
 	private static final long serialVersionUID = -6991980441404489278L;

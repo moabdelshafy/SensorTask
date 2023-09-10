@@ -1,6 +1,5 @@
 package com.sensor.serviceImpl;
 
-import com.sensor.config.TestConfig;
 import com.sensor.entity.AppUser;
 import com.sensor.repository.AppUserRepository;
 import org.junit.jupiter.api.Test;
@@ -9,8 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Arrays;
 import java.util.List;
@@ -18,8 +15,7 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
 
-@DataJpaTest
-@Import(TestConfig.class)
+
 @ExtendWith(MockitoExtension.class)
 class AppUserServiceImplTest {
 
