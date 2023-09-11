@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -40,7 +38,7 @@ public class LocationStatusServiceImpl implements LocationStatusService {
     private final static String Temperature_Sensor = "Temperature";
 
     // Sensor check every 10 second and record any abnormal state
-    //@Scheduled(fixedDelay = 10000, initialDelay = 10000)
+    @Scheduled(fixedDelay = 10000, initialDelay = 10000)
     public void checkAndChangeStateOfLocation() {
 
         List<Location> locations = locationService.findAll();
